@@ -43,35 +43,35 @@ function App() {
   // Navigation & Scroll State
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  
+
   // Interactive Role Tabs
   const [activeTab, setActiveTab] = useState<'waiter' | 'chef' | 'cashier' | 'admin'>('waiter')
-  
+
   // Waiter Simulator State
   const [cart, setCart] = useState(INITIAL_CART)
-  
+
   // Chef Simulator State
   const [kots, setKots] = useState(INITIAL_KOTS)
-  
+
   // Cashier Simulator State
   const [paymentMethod, setPaymentMethod] = useState<'CASH' | 'CARD' | 'UPI'>('UPI')
   const [couponCode, setCouponCode] = useState('')
   const [appliedDiscount, setAppliedDiscount] = useState(0)
   const [couponError, setCouponError] = useState('')
   const [checkoutSuccess, setCheckoutSuccess] = useState(false)
-  
+
   // Admin Simulator State
   const [invites, setInvites] = useState(INITIAL_INVITES)
   const [inviteEmail, setInviteEmail] = useState('')
   const [inviteRole, setInviteRole] = useState('Waiter')
-  
+
   // Contact Form State
   const [formName, setFormName] = useState('')
   const [formEmail, setFormEmail] = useState('')
   const [formMessage, setFormMessage] = useState('')
   const [formErrors, setFormErrors] = useState<{ name?: string; email?: string; message?: string }>({})
   const [formSuccess, setFormSuccess] = useState(false)
-  
+
   // Scroll reveal trigger
   const revealRefs = useRef<HTMLDivElement[]>([])
   revealRefs.current = []
@@ -181,7 +181,7 @@ function App() {
   const handleContactSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     const errors: { name?: string; email?: string; message?: string } = {}
-    
+
     if (!formName.trim()) errors.name = 'Name is required'
     if (!formEmail.trim()) {
       errors.email = 'Email is required'
@@ -205,7 +205,7 @@ function App() {
 
   return (
     <div className="bg-bg-deep min-h-screen flex flex-col font-body antialiased selection:bg-brand-primary selection:text-white">
-      
+
       {/* 1. Header & Navigation */}
       <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-bg-deep/95 border-b border-brand-primary/20 shadow-2xl backdrop-blur-md' : 'bg-transparent border-b border-white/5'}`}>
         <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -301,7 +301,7 @@ function App() {
 
       {/* Main Content Sections */}
       <main className="pt-20">
-        
+
         {/* 2. Hero Section (Product Introduction) */}
         <section className="relative overflow-hidden py-20 lg:py-32">
           {/* Subtle glowing backgrounds */}
@@ -322,7 +322,7 @@ function App() {
               <p className="text-text-secondary text-lg md:text-xl max-w-xl font-normal leading-relaxed">
                 Connect waiters, kitchen chefs, and cashiers seamlessly. Boost ordering speeds by 10x, eliminate billing discrepancies, and run table operations with pixel-perfect control.
               </p>
-              
+
               <div className="flex flex-wrap gap-4 pt-2">
                 <a
                   href="#workflow"
@@ -411,7 +411,7 @@ function App() {
         {/* 3. Interactive Features Simulator Section (Workflow Hub) */}
         <section id="workflow" className="py-20 bg-bg-surface/40 border-y border-white/5">
           <div className="max-w-6xl mx-auto px-6">
-            
+
             {/* Header intro */}
             <div className="text-center max-w-2xl mx-auto mb-16 flex flex-col gap-4">
               <h2 className="text-3xl md:text-4xl font-heading font-bold text-white tracking-tight">
@@ -452,7 +452,7 @@ function App() {
 
             {/* Split Grid for Content and Interactive Mockup */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-              
+
               {/* Left Column: Role Details Info */}
               <div className="lg:col-span-5 text-left flex flex-col gap-5">
                 {activeTab === 'waiter' && (
@@ -535,7 +535,7 @@ function App() {
               {/* Right Column: Simulated Screen Display */}
               <div className="lg:col-span-7 flex justify-center w-full">
                 <div className="w-full max-w-[480px] bg-[#11141b] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[400px] relative">
-                  
+
                   {/* Screen Header bar */}
                   <div className="bg-[#181d28] px-5 py-3 border-b border-white/5 flex justify-between items-center">
                     <div className="flex items-center gap-2">
@@ -554,13 +554,13 @@ function App() {
 
                   {/* Screen Content Body */}
                   <div className="p-5 flex-1 flex flex-col overflow-y-auto">
-                    
+
                     {/* Waiter Interface simulation */}
                     {activeTab === 'waiter' && (
                       <div className="flex-1 flex flex-col justify-between animate-[fadeIn_0.3s_ease-out]">
                         <div className="flex flex-col gap-2">
                           <div className="text-xs text-text-secondary text-left font-semibold pb-1 border-b border-white/5 uppercase tracking-wider">Cart Items</div>
-                          
+
                           {cart.map((item) => (
                             <div key={item.id} className="flex justify-between items-center py-2.5 border-b border-white/5">
                               <span className="text-sm font-medium text-white">{item.name}</span>
@@ -609,7 +609,7 @@ function App() {
                               <span>Grand Total</span>
                               <span className="font-mono text-brand-primary">₹{grandTotal.toFixed(2)}</span>
                             </div>
-                            
+
                             <button
                               onClick={() => setActiveTab('chef')}
                               className="mt-3 w-full py-2.5 rounded-lg bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-heading font-semibold tracking-wide transition-all uppercase flex items-center justify-center gap-1.5 shadow-md shadow-brand-primary/10"
@@ -651,9 +651,9 @@ function App() {
                                   {kot.status}
                                 </span>
                               </div>
-                              
+
                               <p className="text-xs text-text-secondary italic font-mono">{kot.items}</p>
-                              
+
                               {kot.status === 'preparing' && (
                                 <button
                                   onClick={() => markKotReady(kot.id)}
@@ -709,7 +709,7 @@ function App() {
                           <div className="flex flex-col justify-between flex-1">
                             <div className="flex flex-col gap-3">
                               <span className="text-xs text-text-secondary font-semibold uppercase tracking-wider pb-1 border-b border-white/5">Billing Checkout</span>
-                              
+
                               <div className="flex justify-between items-center">
                                 <span className="text-xs text-text-secondary font-medium">Pending Bill Amount</span>
                                 <span className="text-sm font-mono font-bold text-white">₹{(subtotal + taxTotal + serviceTotal).toFixed(2)}</span>
@@ -786,7 +786,7 @@ function App() {
                       <div className="flex-1 flex flex-col justify-between animate-[fadeIn_0.3s_ease-out] text-left">
                         <div className="flex flex-col gap-4">
                           <span className="text-xs text-text-secondary font-semibold uppercase tracking-wider pb-1 border-b border-white/5">Send Cryptographic Invite Link</span>
-                          
+
                           <form onSubmit={sendInvite} className="flex flex-col gap-2.5">
                             <div className="flex gap-2">
                               <input
@@ -807,7 +807,7 @@ function App() {
                                 <option className="bg-[#181d28]" value="Cashier">Cashier</option>
                               </select>
                             </div>
-                            
+
                             <button
                               type="submit"
                               className="w-full py-2 bg-brand-primary hover:bg-brand-primary-hover text-white text-xs font-bold uppercase tracking-wider rounded-lg transition-colors"
@@ -898,7 +898,7 @@ function App() {
         {/* 5. Trust & Metrics Section */}
         <section id="metrics" className="py-20 bg-gradient-to-b from-transparent via-brand-primary/[0.02] to-transparent">
           <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-            
+
             {/* Metric 1 */}
             <div className="flex flex-col items-center gap-1">
               <span className="text-4xl md:text-5xl font-heading font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,92,53,0.25)]">10x</span>
@@ -922,7 +922,7 @@ function App() {
               <span className="text-4xl md:text-5xl font-heading font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,92,53,0.25)]">99.9%</span>
               <span className="text-xs text-text-secondary font-bold uppercase tracking-wider mt-1">Real-time Uptime Sync</span>
             </div>
-            
+
           </div>
         </section>
 
@@ -940,7 +940,7 @@ function App() {
 
           {/* Testimonial Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
+
             {/* Testimonial 1 */}
             <div ref={addToRevealRefs} className="reveal glass-card bg-bg-card border border-white/5 rounded-2xl p-8 hover:border-brand-primary/20 flex flex-col gap-5 text-left h-full transition-all duration-300">
               <div className="flex gap-1 text-brand-secondary">
@@ -1017,7 +1017,7 @@ function App() {
         <section id="contact" className="py-20 bg-bg-surface/20 border-t border-white/5">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start text-left">
-              
+
               {/* Left Column: contact details */}
               <div className="lg:col-span-5 flex flex-col gap-6">
                 <span className="text-xs font-bold text-brand-primary tracking-widest uppercase">Start Today</span>
@@ -1147,7 +1147,7 @@ function App() {
               KHAO<span className="text-brand-primary">PIO</span> POS
             </span>
           </div>
-          
+
           <p className="text-xs text-text-muted">
             &copy; {new Date().getFullYear()} KhaoPio Restaurant Point of Sale. All Rights Reserved. Built with React & Tailwind CSS.
           </p>
