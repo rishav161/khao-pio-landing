@@ -38,7 +38,7 @@ const INITIAL_INVITES = [
 ]
 
 function App() {
-  const POS_URL = import.meta.env.RESTURANT_POS || import.meta.env.VITE_RESTURANT_POS || 'http://localhost:3000'
+  const POS_URL = import.meta.env.VITE_RESTURANT_POS
 
   // Navigation & Scroll State
   const [scrolled, setScrolled] = useState(false)
