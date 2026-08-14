@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #ff5c35;
+  --color-brand-primary-hover: #ff451a;
+  --color-brand-secondary: #ffb300;
+  --color-brand-secondary-hover: #e09d00;
+  --color-bg-deep: #080a0e;
+  --color-bg-surface: #10131b;
+  --color-bg-card: rgba(18, 22, 28, 0.75);
+  
+  --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
+
+/* Custom base resets and utilities not easily fit in standard Tailwind utilities */
+@layer base {
+  body {
+    background-color: #080a0e;
+    color: #a0aec0;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Animation utilities and keyframes */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes floatCard1 {
+  0% { transform: translateY(0) rotate(-2deg); }
+  100% { transform: translateY(-10px) rotate(2deg); }
+}
+
+@keyframes floatCard2 {
+  0% { transform: translateY(0) rotate(1deg); }
+  100% { transform: translateY(-8px) rotate(-3deg); }
+}
+
+.animate-float-1 {
+  animation: floatCard1 4s infinite alternate ease-in-out;
+}
+
+.animate-float-2 {
+  animation: floatCard2 4.5s infinite alternate ease-in-out;
+}
+
+.logo-fire-anim {
+  animation: logoPulse 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes logoPulse {
+  0% {
+    transform: scale(1) rotate(0deg);
+    text-shadow: 0 0 10px rgba(255, 92, 53, 0.3);
+  }
+  100% {
+    transform: scale(1.08) rotate(4deg);
+    text-shadow: 0 0 20px rgba(255, 92, 53, 0.8);
+  }
+}
