@@ -26,9 +26,9 @@
     overflow-x: hidden;
   }
 
-  /* Leaves breathing room below the fixed header when jumping to an anchor link */
+  /* Matches the fixed header's height (h-20) so anchor jumps land flush against it */
   section[id] {
-    scroll-margin-top: 7rem;
+    scroll-margin-top: 5rem;
   }
 
   h1, h2, h3, h4, h5, h6 {
