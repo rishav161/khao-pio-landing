@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import './App.css'
 import {
   Flame,
   Shield,
@@ -74,7 +75,6 @@ function App() {
 
   // Scroll reveal trigger
   const revealRefs = useRef<HTMLDivElement[]>([])
-  revealRefs.current = []
 
   const addToRevealRefs = (el: HTMLDivElement | null) => {
     if (el && !revealRefs.current.includes(el)) {
@@ -343,9 +343,9 @@ function App() {
 
             {/* Right side floating mockup dashboard */}
             <div className="lg:col-span-5 flex justify-center items-center">
-              <div className="relative w-full max-w-[420px] aspect-[4/3] perspective-1000">
+              <div className="relative w-full max-w-[420px] aspect-[4/3] perspective-[1200px]">
                 {/* Main panel */}
-                <div className="w-full h-full bg-gradient-to-br from-[#121620] to-[#0a0c10] border border-white/10 rounded-2xl shadow-3xl p-6 rotate-y-[-10deg] rotate-x-[10deg] hover:rotate-y-[-3deg] hover:rotate-x-[3deg] transition-all duration-700 ease-out transform-style-3d hover:scale-102 group">
+                <div className="w-full h-full bg-gradient-to-br from-[#1c1512] to-[#0a0806] border border-white/10 rounded-2xl shadow-3xl p-6 rotate-y-[-10deg] rotate-x-[10deg] hover:rotate-y-[-3deg] hover:rotate-x-[3deg] transition-all duration-700 ease-out transform-3d hover:scale-[1.02] group">
                   <div className="flex justify-between items-center border-b border-white/5 pb-3 mb-5">
                     <div className="flex gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-[#ff5f56]"></span>

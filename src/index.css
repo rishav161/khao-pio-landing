@@ -3,12 +3,16 @@
 @theme {
   --color-brand-primary: #ff5c35;
   --color-brand-primary-hover: #ff451a;
-  --color-brand-secondary: #ffb300;
-  --color-brand-secondary-hover: #e09d00;
-  --color-bg-deep: #080a0e;
-  --color-bg-surface: #10131b;
-  --color-bg-card: rgba(18, 22, 28, 0.75);
-  
+  --color-brand-secondary: #d68a3f;
+  --color-brand-secondary-hover: #bd7530;
+  --color-bg-deep: #0c0a08;
+  --color-bg-surface: #17130f;
+  --color-bg-card: rgba(30, 24, 18, 0.72);
+  --color-text-secondary: #c7cdd6;
+  --color-text-muted: #7c828b;
+
+  --shadow-3xl: 0 45px 80px -20px rgba(0, 0, 0, 0.55);
+
   --font-heading: 'Outfit', system-ui, -apple-system, sans-serif;
   --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 }
@@ -16,12 +20,17 @@
 /* Custom base resets and utilities not easily fit in standard Tailwind utilities */
 @layer base {
   body {
-    background-color: #080a0e;
-    color: #a0aec0;
+    background-color: var(--color-bg-deep);
+    color: var(--color-text-secondary);
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
   }
-  
+
+  /* Leaves breathing room below the fixed header when jumping to an anchor link */
+  section[id] {
+    scroll-margin-top: 7rem;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', system-ui, -apple-system, sans-serif;
   }
