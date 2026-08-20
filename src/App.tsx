@@ -39,6 +39,7 @@ const INITIAL_INVITES = [
 
 function App() {
   const POS_URL = import.meta.env.VITE_RESTURANT_POS
+  const INQUIRY_EMAIL = import.meta.env.VITE_INQUIRY_EMAIL || import.meta.env.INQUIRY_EMAIL || 'contact@khaopio.com'
 
   // Navigation & Scroll State
   const [scrolled, setScrolled] = useState(false)
@@ -69,8 +70,9 @@ function App() {
   const [formName, setFormName] = useState('')
   const [formEmail, setFormEmail] = useState('')
   const [formMessage, setFormMessage] = useState('')
-  const [formErrors, setFormErrors] = useState<{ name?: string; email?: string; message?: string }>({})
+  const [formErrors, setFormErrors] = useState<{ name?: string; email?: string; message?: string; submit?: string }>({})
   const [formSuccess, setFormSuccess] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   // Scroll reveal trigger
   const revealRefs = useRef<HTMLDivElement[]>([])
@@ -178,9 +180,9 @@ function App() {
   }
 
   // Contact Form Submission
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const errors: { name?: string; email?: string; message?: string } = {}
+    const errors: { name?: string; email?: string; message?: string; submit?: string } = {}
 
     if (!formName.trim()) errors.name = 'Name is required'
     if (!formEmail.trim()) {
@@ -196,11 +198,39 @@ function App() {
     }
 
     setFormErrors({})
-    setFormSuccess(true)
-    // Clear form fields
-    setFormName('')
-    setFormEmail('')
-    setFormMessage('')
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${INQUIRY_EMAIL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name: formName,
+          email: formEmail,
+          message: formMessage,
+          _subject: `New Setup Inquiry from ${formName}`,
+          _template: 'table'
+        })
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (response.ok || data.success === 'true' || data.success === true) {
+        setFormSuccess(true)
+        setFormName('')
+        setFormEmail('')
+        setFormMessage('')
+      } else {
+        setFormErrors({ submit: data.message || 'Failed to send inquiry email. Please try again.' })
+      }
+    } catch {
+      setFormErrors({ submit: 'Network error. Please check your connection and try again.' })
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -1122,11 +1152,26 @@ function App() {
                       )}
                     </div>
 
+                    {formErrors.submit && (
+                      <div className="bg-[#ff5f56]/10 border border-[#ff5f56]/20 text-[#ff5f56] text-xs p-3 rounded-xl font-medium">
+                        {formErrors.submit}
+                      </div>
+                    )}
+
                     <button
                       type="submit"
-                      className="w-full py-4 rounded-xl bg-brand-primary hover:bg-brand-primary-hover text-white font-heading font-bold text-sm tracking-wide transition-all shadow-[0_0_15px_rgba(255,92,53,0.2)] hover:shadow-[0_0_20px_rgba(255,92,53,0.45)] flex items-center justify-center gap-2"
+                      disabled={isSubmitting}
+                      className="w-full py-4 rounded-xl bg-brand-primary hover:bg-brand-primary-hover disabled:opacity-50 disabled:cursor-not-allowed text-white font-heading font-bold text-sm tracking-wide transition-all shadow-[0_0_15px_rgba(255,92,53,0.2)] hover:shadow-[0_0_20px_rgba(255,92,53,0.45)] flex items-center justify-center gap-2"
                     >
-                      <Send size={14} /> Send Setup Inquiry
+                      {isSubmitting ? (
+                        <>
+                          <RefreshCw size={14} className="animate-spin" /> Sending Inquiry...
+                        </>
+                      ) : (
+                        <>
+                          <Send size={14} /> Send Setup Inquiry
+                        </>
+                      )}
                     </button>
                   </form>
                 )}
