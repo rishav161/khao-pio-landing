@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
+import './App.css'
+import { PrivacyPolicy, TermsOfService } from './pages/LegalPages'
 import {
   Flame,
   Shield,
@@ -17,7 +19,10 @@ import {
   Phone,
   MapPin,
   Send,
-  RefreshCw
+  RefreshCw,
+  LayoutDashboard,
+  LayoutGrid,
+  BarChart3
 } from 'lucide-react'
 
 // Mock Initial Data
@@ -37,8 +42,45 @@ const INITIAL_INVITES = [
   { email: 'meera.chef@khaopio.com', role: 'Kitchen Chef', status: 'Active', token: 'tok_5b17c9' }
 ]
 
+const ORDER_PIPELINE = [
+  { icon: Utensils, label: 'Order Placed', count: 4, ticket: '#102 · Takeaway · ₹547.80' },
+  { icon: CookingPot, label: 'In Kitchen', count: 3, ticket: '#108 · Table 6 · Firing 3 items' },
+  { icon: Receipt, label: 'At Checkout', count: 2, ticket: '#105 · Table 2 · Awaiting UPI' },
+  { icon: Check, label: 'Completed', count: 24, ticket: '#107 · Takeaway · Paid ₹1,283.70' }
+]
+
+const MODULE_FEATURES = [
+  {
+    icon: Utensils,
+    title: 'Menu Configuration',
+    description: 'Organize dishes into categories, price each one, and mark anything Sold Out in one tap — it disappears from every waiter\'s screen instantly, not just the kitchen\'s.'
+  },
+  {
+    icon: Users,
+    title: 'Staff & Roles',
+    description: 'Five permission tiers, Super Admin down to Kitchen Chef, so a waiter can fire tickets but never touch pricing. Invite a hire by email and they\'re active before their first shift.'
+  },
+  {
+    icon: BarChart3,
+    title: 'Reports & Tax Logs',
+    description: 'Filter by date range and payment method down to a dish-level transaction log, with tax and service charge broken out per order — everything a GST return needs, already itemized.'
+  }
+]
+
 function App() {
   const POS_URL = import.meta.env.VITE_RESTURANT_POS
+
+  // Full-page legal routes (hash-based, no router dependency needed)
+  const [route, setRoute] = useState(() => window.location.hash)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash
+      setRoute(hash)
+      if (hash.startsWith('#/')) window.scrollTo(0, 0)
+    }
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
 
   // Navigation & Scroll State
   const [scrolled, setScrolled] = useState(false)
@@ -74,7 +116,6 @@ function App() {
 
   // Scroll reveal trigger
   const revealRefs = useRef<HTMLDivElement[]>([])
-  revealRefs.current = []
 
   const addToRevealRefs = (el: HTMLDivElement | null) => {
     if (el && !revealRefs.current.includes(el)) {
@@ -202,6 +243,9 @@ function App() {
     setFormEmail('')
     setFormMessage('')
   }
+
+  if (route === '#/privacy') return <PrivacyPolicy />
+  if (route === '#/terms') return <TermsOfService />
 
   return (
     <div className="bg-bg-deep min-h-screen flex flex-col font-body antialiased selection:bg-brand-primary selection:text-white">
@@ -343,9 +387,9 @@ function App() {
 
             {/* Right side floating mockup dashboard */}
             <div className="lg:col-span-5 flex justify-center items-center">
-              <div className="relative w-full max-w-[420px] aspect-[4/3] perspective-1000">
+              <div className="relative w-full max-w-[420px] aspect-[4/3] perspective-[1200px]">
                 {/* Main panel */}
-                <div className="w-full h-full bg-gradient-to-br from-[#121620] to-[#0a0c10] border border-white/10 rounded-2xl shadow-3xl p-6 rotate-y-[-10deg] rotate-x-[10deg] hover:rotate-y-[-3deg] hover:rotate-x-[3deg] transition-all duration-700 ease-out transform-style-3d hover:scale-102 group">
+                <div className="w-full h-full bg-gradient-to-br from-[#1c1512] to-[#0a0806] border border-white/10 rounded-2xl shadow-3xl p-6 rotate-y-[-10deg] rotate-x-[10deg] hover:rotate-y-[-3deg] hover:rotate-x-[3deg] transition-all duration-700 ease-out transform-3d hover:scale-[1.02] group">
                   <div className="flex justify-between items-center border-b border-white/5 pb-3 mb-5">
                     <div className="flex gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-[#ff5f56]"></span>
@@ -408,7 +452,112 @@ function App() {
           </div>
         </section>
 
-        {/* 3. Interactive Features Simulator Section (Workflow Hub) */}
+        {/* 3. Core Modules Section */}
+        <section id="features" className="py-20 max-w-6xl mx-auto px-6">
+          {/* Header intro */}
+          <div className="text-center max-w-2xl mx-auto mb-16 flex flex-col gap-4 items-center">
+            <div className="inline-flex items-center gap-2 bg-brand-primary/10 border border-brand-primary/20 text-brand-primary px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase">
+              Core Modules
+            </div>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white tracking-tight">
+              Built Around How a Service Actually Runs
+            </h2>
+            <p className="text-text-secondary text-base">
+              Not a single screen bolted onto a till — six connected modules covering the floor, the pass, and the register, so every role sees exactly what their job needs and nothing else.
+            </p>
+          </div>
+
+          {/* Signature moment: live order pipeline */}
+          <div ref={addToRevealRefs} className="reveal bg-bg-card border border-white/5 rounded-2xl p-6 md:p-8 mb-8">
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-8">
+              <div>
+                <p className="text-xs font-semibold text-brand-primary uppercase tracking-wider mb-1">Order Lifecycle</p>
+                <h3 className="text-xl font-heading font-bold text-white">Every Ticket Moves Through One Pipeline — Live</h3>
+              </div>
+              <span className="text-xs text-text-muted font-medium">Order Placed → In Kitchen → At Checkout → Completed</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {ORDER_PIPELINE.map((stage, idx) => (
+                <div key={stage.label} className="relative bg-white/2 border border-white/5 rounded-xl p-5 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <div className="w-9 h-9 rounded-lg bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center">
+                      <stage.icon size={16} />
+                    </div>
+                    <span className="text-lg font-heading font-bold text-white">{stage.count}</span>
+                  </div>
+                  <p className="text-sm font-semibold text-white">{stage.label}</p>
+                  <p className="text-xs text-text-muted font-mono leading-relaxed">{stage.ticket}</p>
+                  {idx < ORDER_PIPELINE.length - 1 && (
+                    <ArrowRight size={16} className="hidden md:block absolute top-1/2 -right-[22px] -translate-y-1/2 text-white/15 z-10" />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Module bento grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Live Ops Dashboard - wide card */}
+            <div ref={addToRevealRefs} className="reveal glass-card md:col-span-2 flex flex-col text-left bg-bg-card border border-white/5 rounded-2xl p-8 hover:border-brand-primary/20 hover:-translate-y-1 transition-all duration-300">
+              <div className="w-12 h-12 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center mb-6">
+                <LayoutDashboard size={22} />
+              </div>
+              <h3 className="text-xl font-heading font-bold text-white mb-3">Live Ops Dashboard</h3>
+              <p className="text-text-secondary text-sm leading-relaxed mb-6">
+                Sales trend, top dishes, payment-method split, and peak-hour traffic — filterable by day, week, or a custom range. Every tile updates the second a bill clears.
+              </p>
+              <div className="grid grid-cols-3 gap-4 mt-auto pt-6 border-t border-white/5">
+                <div>
+                  <p className="text-xs text-text-muted uppercase tracking-wider mb-1">Total Sales</p>
+                  <p className="text-lg font-heading font-bold text-white">₹52,480</p>
+                </div>
+                <div>
+                  <p className="text-xs text-text-muted uppercase tracking-wider mb-1">Paid Orders</p>
+                  <p className="text-lg font-heading font-bold text-white">68</p>
+                </div>
+                <div>
+                  <p className="text-xs text-text-muted uppercase tracking-wider mb-1">Avg Ticket</p>
+                  <p className="text-lg font-heading font-bold text-white">₹771</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Table Management + Kitchen Display - stacked column */}
+            <div className="flex flex-col gap-6 h-full">
+              <div ref={addToRevealRefs} className="reveal glass-card flex-1 flex flex-col text-left bg-bg-card border border-white/5 rounded-2xl p-6 hover:border-brand-primary/20 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center mb-4">
+                  <LayoutGrid size={18} />
+                </div>
+                <h3 className="text-base font-heading font-bold text-white mb-2">Table Management</h3>
+                <p className="text-text-secondary text-xs leading-relaxed">
+                  Every table — Free, Busy, Reserved — updates live as waiters seat guests, with bookings feeding into the same view so nobody double-books a table.
+                </p>
+              </div>
+              <div ref={addToRevealRefs} className="reveal glass-card flex-1 flex flex-col text-left bg-bg-card border border-white/5 rounded-2xl p-6 hover:border-brand-primary/20 transition-all duration-300">
+                <div className="w-10 h-10 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center mb-4">
+                  <CookingPot size={18} />
+                </div>
+                <h3 className="text-base font-heading font-bold text-white mb-2">Kitchen Display System</h3>
+                <p className="text-text-secondary text-xs leading-relaxed">
+                  Tickets fire the moment checkout sends them, filterable by Pending and Preparing, so the pass always knows what's next.
+                </p>
+              </div>
+            </div>
+
+            {/* Remaining module cards */}
+            {MODULE_FEATURES.map((feature) => (
+              <div key={feature.title} ref={addToRevealRefs} className="reveal glass-card flex flex-col items-start text-left bg-bg-card border border-white/5 rounded-2xl p-8 hover:border-brand-primary/20 hover:-translate-y-1 transition-all duration-300">
+                <div className="w-12 h-12 rounded-xl bg-brand-primary/10 border border-brand-primary/20 text-brand-primary flex items-center justify-center mb-6">
+                  <feature.icon size={22} />
+                </div>
+                <h3 className="text-xl font-heading font-bold text-white mb-3">{feature.title}</h3>
+                <p className="text-text-secondary text-sm leading-relaxed">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* 4. Interactive Features Simulator Section (Workflow Hub) */}
         <section id="workflow" className="py-20 bg-bg-surface/40 border-y border-white/5">
           <div className="max-w-6xl mx-auto px-6">
 
@@ -846,7 +995,7 @@ function App() {
           </div>
         </section>
 
-        {/* 4. Core Benefits Section */}
+        {/* 5. Core Benefits Section */}
         <section id="benefits" className="py-20 max-w-6xl mx-auto px-6">
           {/* Header intro */}
           <div className="text-center max-w-2xl mx-auto mb-16 flex flex-col gap-4">
@@ -895,38 +1044,38 @@ function App() {
           </div>
         </section>
 
-        {/* 5. Trust & Metrics Section */}
-        <section id="metrics" className="py-20 bg-gradient-to-b from-transparent via-brand-primary/[0.02] to-transparent">
-          <div className="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-
-            {/* Metric 1 */}
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-4xl md:text-5xl font-heading font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,92,53,0.25)]">10x</span>
-              <span className="text-xs text-text-secondary font-bold uppercase tracking-wider mt-1">Faster KOT Dispatch</span>
+        {/* 6. Trust & Metrics Section */}
+        <section id="metrics" className="py-20 max-w-6xl mx-auto px-6">
+          <div ref={addToRevealRefs} className="reveal bg-bg-card border border-white/5 rounded-2xl px-8 py-12 md:px-12">
+            <div className="text-center max-w-xl mx-auto mb-10 flex flex-col gap-3 items-center">
+              <div className="inline-flex items-center gap-2 bg-brand-primary/10 border border-brand-primary/20 text-brand-primary px-4 py-1.5 rounded-full text-xs font-semibold tracking-wider uppercase">
+                By The Numbers
+              </div>
+              <h2 className="text-2xl md:text-3xl font-heading font-bold text-white tracking-tight">
+                The Same Claims, Measured
+              </h2>
+              <p className="text-text-secondary text-sm">
+                What the modules above actually deliver once they're running a real shift.
+              </p>
             </div>
 
-            {/* Metric 2 */}
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-4xl md:text-5xl font-heading font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,92,53,0.25)]">0%</span>
-              <span className="text-xs text-text-secondary font-bold uppercase tracking-wider mt-1">Calculation Discrepancy</span>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 md:gap-0 md:divide-x md:divide-white/5">
+              {[
+                { value: '10x', label: 'Faster KOT Dispatch' },
+                { value: '0%', label: 'Calculation Discrepancy' },
+                { value: '<1.8s', label: 'KOT Delivery Latency' },
+                { value: '99.9%', label: 'Real-time Uptime Sync' }
+              ].map((metric) => (
+                <div key={metric.label} className="flex flex-col items-center gap-1 px-4">
+                  <span className="text-4xl md:text-5xl font-heading font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,92,53,0.25)]">{metric.value}</span>
+                  <span className="text-xs text-text-secondary font-bold uppercase tracking-wider mt-1 text-center">{metric.label}</span>
+                </div>
+              ))}
             </div>
-
-            {/* Metric 3 */}
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-4xl md:text-5xl font-heading font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,92,53,0.25)]">&lt;1.8s</span>
-              <span className="text-xs text-text-secondary font-bold uppercase tracking-wider mt-1">KOT Delivery Latency</span>
-            </div>
-
-            {/* Metric 4 */}
-            <div className="flex flex-col items-center gap-1">
-              <span className="text-4xl md:text-5xl font-heading font-black text-white tracking-tight drop-shadow-[0_0_15px_rgba(255,92,53,0.25)]">99.9%</span>
-              <span className="text-xs text-text-secondary font-bold uppercase tracking-wider mt-1">Real-time Uptime Sync</span>
-            </div>
-
           </div>
         </section>
 
-        {/* 6. Testimonials Section */}
+        {/* 7. Testimonials Section */}
         <section id="testimonials" className="py-20 max-w-6xl mx-auto px-6">
           {/* Header intro */}
           <div className="text-center max-w-2xl mx-auto mb-16 flex flex-col gap-4">
@@ -1013,7 +1162,7 @@ function App() {
           </div>
         </section>
 
-        {/* 7. Contact / Get Started Form Section */}
+        {/* 8. Contact / Get Started Form Section */}
         <section id="contact" className="py-20 bg-bg-surface/20 border-t border-white/5">
           <div className="max-w-6xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start text-left">
@@ -1138,7 +1287,7 @@ function App() {
 
       </main>
 
-      {/* 8. Footer */}
+      {/* 9. Footer */}
       <footer className="mt-auto bg-[#05070a] border-t border-white/5 py-12">
         <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-2">
@@ -1153,9 +1302,9 @@ function App() {
           </p>
 
           <div className="flex gap-4">
-            <a href="#" className="text-xs text-text-muted hover:text-brand-primary transition-colors">Privacy Policy</a>
+            <a href="#/privacy" className="text-xs text-text-muted hover:text-brand-primary transition-colors">Privacy Policy</a>
             <span className="text-text-muted/30">•</span>
-            <a href="#" className="text-xs text-text-muted hover:text-brand-primary transition-colors">Terms of Service</a>
+            <a href="#/terms" className="text-xs text-text-muted hover:text-brand-primary transition-colors">Terms of Service</a>
           </div>
         </div>
       </footer>
